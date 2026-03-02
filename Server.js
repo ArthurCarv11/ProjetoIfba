@@ -54,7 +54,25 @@ app.delete('/livros/:isbn', (req, res) => {
     }
 });
 
+app.patch('/livros/:isbn', (req, res) => {
+    const { isbn } = req.params;
+    const novosDados = req.body;
+    const resultado = minhaBiblioteca.atualizarLivro(isbn, novosDados);
+    
+    if (resultado) {
+        const livroAtualizado = minhaBiblioteca.buscarPorIsbn(isbn);
+        res.status(200).json({
+            mensagem: "Livro atualizado com sucesso",
+            livro: livroAtualizado
+        });
+    } else {
+        res.status(404).json({
+            erro: "Livro não encontrado ou dados inválidos"
+        });
+    }
+});
+
 const PORT = 3000;
 app.listen(PORT, () =>{
-    console.log(`Servidor de Agenda ronando em http://localhost:${PORT}`);
+    console.log(`Servidor da biblioteca rodando em http://localhost:${PORT}`);
 });
